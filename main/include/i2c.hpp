@@ -2,7 +2,7 @@
 #define I2C_H_
 
 #include "driver/gpio.h"
-#include "rom/ets_sys.h"
+#include "esp32/rom/ets_sys.h"
 
 class I2C {
 private:
