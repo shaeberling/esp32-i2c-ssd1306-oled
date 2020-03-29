@@ -2,7 +2,7 @@
 #include "fonts.h"
 #include "ssd1306.hpp"
 #include "driver/gpio.h"
-#include "driver/adc.h"
+#include <driver/adc.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include <cstdio>
@@ -11,7 +11,7 @@
 #include <iostream>
 using namespace std;
 
-OLED oled = OLED(GPIO_NUM_19, GPIO_NUM_22, SSD1306_128x64);
+OLED oled = OLED(GPIO_NUM_22, GPIO_NUM_21, SSD1306_128x64);
 
 void myTask(void *pvParameters) {
 	adc1_config_width(ADC_WIDTH_12Bit);
@@ -31,11 +31,11 @@ void myTask(void *pvParameters) {
 //	}
 	while (1) {
 		os.str("");
-		os << "ADC_CH4(GPIO32):" << adc1_get_voltage(ADC1_CHANNEL_4);
+		os << "ADC_CH4(GPIO32):" << adc1_get_raw(ADC1_CHANNEL_4);
 		for (int i = 0; i < 127; i++) {
 			graph[i] = graph[i + 1];
 		}
-		graph[127] = adc1_get_voltage(ADC1_CHANNEL_4);
+		graph[127] = adc1_get_raw(ADC1_CHANNEL_4);
 		oled.clear();
 //		sprintf(data, "01");
 //		oled.select_font(2);
@@ -59,8 +59,6 @@ void myTask(void *pvParameters) {
 extern "C" {
 #endif
 void app_main() {
-
-	oled = OLED(GPIO_NUM_19, GPIO_NUM_22, SSD1306_128x64);
 	if (oled.init()) {
 		ESP_LOGI("OLED", "oled inited");
 //		oled.draw_rectangle(10, 30, 20, 20, WHITE);
